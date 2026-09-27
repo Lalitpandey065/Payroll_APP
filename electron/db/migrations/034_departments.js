@@ -1,0 +1,35 @@
+module.exports = `
+CREATE TABLE IF NOT EXISTS departments (
+  id TEXT PRIMARY KEY,
+  company_id TEXT NOT NULL REFERENCES companies(id) ON DELETE CASCADE,
+  name TEXT NOT NULL,
+  principal_name TEXT DEFAULT '',
+  address TEXT DEFAULT '',
+  location_nature TEXT DEFAULT '',
+  main_contractor TEXT DEFAULT '',
+  main_contractor_address TEXT DEFAULT '',
+  contractor TEXT DEFAULT '',
+  contractor_address TEXT DEFAULT '',
+  sub_contractor TEXT DEFAULT '',
+  sub_contractor_address TEXT DEFAULT '',
+  state TEXT DEFAULT '',
+  ot_percentage REAL DEFAULT 0,
+  esic_on_ot TEXT DEFAULT 'No',
+  esi_limit_on_ot TEXT DEFAULT 'No',
+  epf_on_ot TEXT DEFAULT 'No',
+  calculate_on_hours TEXT DEFAULT 'No',
+  per_day_hours REAL DEFAULT 0,
+  wages_to_calculate TEXT DEFAULT 'Gross',
+  ot_allowances TEXT DEFAULT '[]',
+  epf_in_netpay TEXT DEFAULT 'No',
+  esi_in_netpay TEXT DEFAULT 'No',
+  lwf_in_netpay TEXT DEFAULT 'No',
+  prof_tax_in_netpay TEXT DEFAULT 'No',
+  lwf_calculate TEXT DEFAULT 'Gross',
+  lwf_allowances TEXT DEFAULT '[]',
+  created_at TEXT DEFAULT (datetime('now')),
+  updated_at TEXT DEFAULT (datetime('now')),
+  UNIQUE(company_id, name)
+);
+CREATE INDEX IF NOT EXISTS idx_dept_company ON departments(company_id);
+`;

@@ -1,0 +1,31 @@
+module.exports = `
+CREATE TABLE IF NOT EXISTS setup_allowances (
+  id INTEGER PRIMARY KEY AUTOINCREMENT,
+  company_id TEXT NOT NULL,
+  code TEXT NOT NULL,
+  component_type TEXT NOT NULL DEFAULT 'allowance',
+  slot_number INTEGER NOT NULL,
+  heading TEXT NOT NULL DEFAULT '',
+  hindi_heading TEXT DEFAULT '',
+  is_gross_salary INTEGER DEFAULT 1,
+  calculation TEXT DEFAULT 'Month',
+  epf_status INTEGER DEFAULT 0,
+  esi_status INTEGER DEFAULT 1,
+  bonus_status INTEGER DEFAULT 1,
+  leave_encashment INTEGER DEFAULT 0,
+  overtime_status INTEGER DEFAULT 1,
+  gratuity_status INTEGER DEFAULT 0,
+  shown_in_print INTEGER DEFAULT 1,
+  shown_in_screen INTEGER DEFAULT 1,
+  carry_forward INTEGER DEFAULT 1,
+  is_taxable INTEGER DEFAULT 1,
+  mode TEXT DEFAULT 'Salary',
+  percentage REAL DEFAULT 0.00,
+  pct_bases TEXT DEFAULT '[]',
+  is_active INTEGER DEFAULT 1,
+  created_at TEXT DEFAULT (datetime('now')),
+  updated_at TEXT DEFAULT (datetime('now')),
+  UNIQUE(company_id, code),
+  FOREIGN KEY (company_id) REFERENCES companies(id) ON DELETE CASCADE
+);
+`;

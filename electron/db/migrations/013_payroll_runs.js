@@ -1,0 +1,42 @@
+module.exports = `
+CREATE TABLE IF NOT EXISTS payroll_runs (
+  id TEXT PRIMARY KEY,
+  company_id TEXT NOT NULL REFERENCES companies(id),
+  month INTEGER NOT NULL,
+  year INTEGER NOT NULL,
+  run_type TEXT NOT NULL DEFAULT 'regular',
+  status TEXT NOT NULL DEFAULT 'draft', -- draft|under_review|approved|locked|cancelled
+  total_employees INTEGER NOT NULL DEFAULT 0,
+  pf_eligible_count INTEGER NOT NULL DEFAULT 0,
+  esi_eligible_count INTEGER NOT NULL DEFAULT 0,
+  total_gross REAL NOT NULL DEFAULT 0,
+  total_lop_deduction REAL NOT NULL DEFAULT 0,
+  total_net REAL NOT NULL DEFAULT 0,
+  total_pf_employee REAL NOT NULL DEFAULT 0,
+  total_pf_employer REAL NOT NULL DEFAULT 0,
+  total_eps REAL NOT NULL DEFAULT 0,
+  total_edli REAL NOT NULL DEFAULT 0,
+  total_esi_employee REAL NOT NULL DEFAULT 0,
+  total_esi_employer REAL NOT NULL DEFAULT 0,
+  total_tds REAL NOT NULL DEFAULT 0,
+  total_pt REAL NOT NULL DEFAULT 0,
+  total_lwf_employee REAL NOT NULL DEFAULT 0,
+  total_advance_recovery REAL NOT NULL DEFAULT 0,
+  total_other_deductions REAL NOT NULL DEFAULT 0,
+  run_by TEXT NOT NULL,
+  reviewed_by TEXT,
+  approved_by TEXT,
+  approved_at TEXT,
+  locked_by TEXT,
+  locked_at TEXT,
+  unlock_count INTEGER NOT NULL DEFAULT 0,
+  cancelled_reason TEXT,
+  run_duration_ms INTEGER,
+  created_at TEXT NOT NULL DEFAULT (datetime('now')),
+  updated_at TEXT NOT NULL DEFAULT (datetime('now')),
+  synced INTEGER NOT NULL DEFAULT 0,
+  synced_at TEXT,
+  UNIQUE(company_id, month, year, run_type)
+);
+CREATE INDEX IF NOT EXISTS idx_runs_company ON payroll_runs(company_id);
+`;
