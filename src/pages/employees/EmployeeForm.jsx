@@ -78,6 +78,8 @@ export default function EmployeeForm() {
   const [annualCtc, setAnnualCtc] = useState('');
   const [salaryEffectiveFrom, setSalaryEffectiveFrom] = useState('');
   const [existingSalaryId, setExistingSalaryId] = useState(null);
+  // Salary as loaded on edit, so an unchanged save doesn't re-assign (and log a revision)
+  const [loadedSalary, setLoadedSalary] = useState(null);
 
   // CTC linkage & ESI ceiling locks
   const [monthlyCtc, setMonthlyCtc] = useState(0);
@@ -347,6 +349,11 @@ export default function EmployeeForm() {
           setSelectedStructureId(d.salary.structure_id || '');
           setAnnualCtc(d.salary.ctc?.toString() || '');
           setSalaryEffectiveFrom(d.salary.effective_from || '');
+          setLoadedSalary({
+            structureId: d.salary.structure_id || '',
+            ctc: parseFloat(d.salary.ctc),
+            effectiveFrom: d.salary.effective_from || ''
+          });
         }
 
         // Preload investment declaration
@@ -559,12 +566,17 @@ export default function EmployeeForm() {
       // Save salary assignment if a structure was selected
       if (selectedStructureId && annualCtc) {
         const ctcVal = parseFloat(annualCtc);
-        if (!isNaN(ctcVal) && ctcVal > 0) {
+        const salaryChanged = !loadedSalary
+          || loadedSalary.structureId !== selectedStructureId
+          || loadedSalary.ctc !== ctcVal
+          || loadedSalary.effectiveFrom !== (salaryEffectiveFrom || '');
+        if (!isNaN(ctcVal) && ctcVal > 0 && salaryChanged) {
+          // overrides = null keeps existing component_overrides (Data Maintenance > Emoluments)
           await window.api.salary.assignStructure(
             empId,
             selectedStructureId,
             ctcVal,
-            {},
+            null,
             salaryEffectiveFrom || null
           );
         }
