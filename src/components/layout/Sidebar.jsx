@@ -24,7 +24,8 @@ import {
   DollarSign,
   MinusCircle,
   ShieldCheck,
-  CreditCard
+  CreditCard,
+  Link2
 } from 'lucide-react';
 import { useAuthStore } from '../../store/auth.store';
 import { useCompanyStore } from '../../store/company.store';
@@ -194,6 +195,7 @@ const mastersNav = [
   { label: 'Employee',         path: '/employees',           icon: Users },
   { label: 'Company',          path: '/companies',           icon: Building2 },
   { label: 'Salary Structure', path: '/salary',              icon: IndianRupee },
+  { label: 'Salary Mapping',   path: '/salary/mapping',      icon: Link2 },
 ];
 
 export default function Sidebar() {
@@ -428,7 +430,10 @@ export default function Sidebar() {
                     <div className="pl-6 space-y-0.5">
                       {mastersNav.map((sub) => {
                         const SubIcon = sub.icon;
-                        const isSubActive = location.pathname === sub.path || location.pathname.startsWith(sub.path + '/');
+                        // Longest matching path wins, so /salary/mapping doesn't also highlight /salary
+                        const matchesPath = (p) => location.pathname === p || location.pathname.startsWith(p + '/');
+                        const isSubActive = matchesPath(sub.path) &&
+                          !mastersNav.some(o => o.path.length > sub.path.length && matchesPath(o.path));
                         return (
                           <div
                             key={sub.path}

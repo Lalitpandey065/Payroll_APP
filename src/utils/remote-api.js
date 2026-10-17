@@ -67,6 +67,7 @@ function buildRemoteApi(serverUrl, apiKey) {
       createStructure: (companyId, name, description, defaultCtc) =>
         post('/api/salary/create', { companyId, name, description, defaultCtc }),
       getAll: (filters) => get('/api/salary', filters),
+      getSalaryMappings: (companyId) => get('/api/salary/mappings', { companyId }),
       getStructureWithComponents: (id) => get(`/api/salary/${id}`),
       assignStructure: (empId, structureId, ctc, overrides, effectiveFrom) =>
         post('/api/salary/assign', { empId, structureId, ctc, overrides, effectiveFrom }),

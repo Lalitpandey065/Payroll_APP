@@ -84,7 +84,7 @@ export default function SalaryMapping() {
 
     try {
       const res = await window.api.salary.assignStructure(
-        row.emp_id, e.structure_id, ctcNum, {}, e.effectiveFrom || null
+        row.emp_id, e.structure_id, ctcNum, null, e.effectiveFrom || null // null keeps existing component overrides
       );
       if (res.success) {
         setSaved(prev => ({ ...prev, [row.emp_id]: true }));

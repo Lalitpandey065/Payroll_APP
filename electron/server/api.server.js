@@ -159,6 +159,7 @@ function startServer(port = 7654, apiKey = '') {
     return ok(svc.salaryService.createStructure(companyId, name, description, defaultCtc));
   }));
   app.get('/api/salary',           wrap(async req => ok(svc.salaryService.getAllStructures(req.query))));
+  app.get('/api/salary/mappings', wrap(async req => ok(svc.salaryService.getSalaryMappings(req.query.companyId))));
   app.get('/api/salary/:id',       wrap(async req => ok(svc.salaryService.getStructureWithComponents(req.params.id))));
   app.post('/api/salary/assign',   wrap(async req => {
     const { empId, structureId, ctc, overrides, effectiveFrom } = req.body;

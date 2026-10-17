@@ -14,7 +14,7 @@ class SalaryService {
     return salaryRepo.getStructureWithComponents(id);
   }
 
-  assignSalaryStructure(empId, structureId, ctc, overrides = {}, effectiveFrom = null) {
+  assignSalaryStructure(empId, structureId, ctc, overrides = null, effectiveFrom = null) {
     return salaryRepo.assignSalaryStructure(empId, structureId, ctc, overrides, effectiveFrom);
   }
 

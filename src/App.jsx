@@ -11,6 +11,7 @@ import EmployeeList from './pages/employees/EmployeeList';
 import EmployeeForm from './pages/employees/EmployeeForm';
 import StructureList from './pages/salary/StructureList';
 import StructureBuilder from './pages/salary/StructureBuilder';
+import SalaryMapping from './pages/salary/SalaryMapping';
 import AttendanceEntry from './pages/attendance/AttendanceEntry';
 import PayrollRun from './pages/payroll/PayrollRun';
 import PayrollReview from './pages/payroll/PayrollReview';
@@ -184,6 +185,14 @@ export default function App() {
           element={
             <ProtectedLayout>
               <StructureBuilder />
+            </ProtectedLayout>
+          }
+        />
+        <Route
+          path="/salary/mapping"
+          element={
+            <ProtectedLayout>
+              <SalaryMapping />
             </ProtectedLayout>
           }
         />

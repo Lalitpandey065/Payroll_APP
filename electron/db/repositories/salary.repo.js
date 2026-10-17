@@ -35,17 +35,24 @@ class SalaryRepository extends BaseRepository {
     return { ...structure, components };
   }
 
-  assignSalaryStructure(empId, structureId, ctc, overrides = {}, effectiveFrom = null) {
+  /**
+   * Pass overrides = null to keep the employee's existing component_overrides
+   * (e.g. amounts set in Data Maintenance > Emoluments); pass an object to replace them.
+   */
+  assignSalaryStructure(empId, structureId, ctc, overrides = null, effectiveFrom = null) {
     if (!effectiveFrom) {
       const now = new Date();
       const yr = now.getMonth() >= 3 ? now.getFullYear() : now.getFullYear() - 1;
       effectiveFrom = `${yr}-04-01`;
     }
     const monthlyCtc = ctc / 12;
-    const existing = this.db.prepare('SELECT id FROM employee_salary WHERE emp_id = ?').get(empId);
+    const existing = this.db.prepare('SELECT id, component_overrides FROM employee_salary WHERE emp_id = ?').get(empId);
     const record = {
       emp_id: empId, structure_id: structureId, ctc, monthly_ctc: monthlyCtc,
-      component_overrides: JSON.stringify(overrides), effective_from: effectiveFrom,
+      component_overrides: overrides != null
+        ? JSON.stringify(overrides)
+        : (existing?.component_overrides ?? '{}'),
+      effective_from: effectiveFrom,
       effective_to: null,
       revision_reason: existing ? 'Salary Revision' : 'Initial Structuring',
       revised_by: 'system'
